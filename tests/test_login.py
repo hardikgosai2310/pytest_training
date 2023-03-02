@@ -20,3 +20,4 @@ class TestLoginUI:
         driver.get('https://opensource-demo.orangehrmlive.com/')
         actual_header = driver.find_element(By.XPATH, '//h5').text
         assert_that(actual_header).is_equal_to('Login')
+
