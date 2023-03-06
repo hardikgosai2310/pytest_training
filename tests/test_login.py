@@ -5,16 +5,10 @@ from assertpy import assert_that
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
+from base.webdriver_listner import WebDriverWrapper
 
-class TestLogin:
-    @pytest.fixture(scope="function", autouse=True)
-    def browser_config(self):
-        self.driver = webdriver.Chrome()
-        self.driver.maximize_window()
-        self.driver.implicitly_wait(20)
-        self.driver.get("https://opensource-demo.orangehrmlive.com/")
-        yield
-        self.driver.quit()
+
+class TestLogin(WebDriverWrapper):
 
     def test_valid_login(self):
         self.driver.find_element(By.NAME, "username").send_keys("Admin")
