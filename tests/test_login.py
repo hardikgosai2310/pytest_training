@@ -9,20 +9,25 @@ from base.webdriver_listner import WebDriverWrapper
 
 
 class TestLogin(WebDriverWrapper):
-    def test_valid_login(self):
-        self.driver.find_element(By.NAME, "username").send_keys("Admin")
-        self.driver.find_element(By.NAME, "password").send_keys("admin123")
+    @pytest.mark.parametrize("username, password", [("Admin", "admin123")])
+    def test_valid_login(self, username, password):
+        self.driver.find_element(By.NAME, "username").send_keys(username)
+        self.driver.find_element(By.NAME, "password").send_keys(password)
         self.driver.find_element(By.XPATH, "//button[normalize-space()='Login']").click()
         actual_text = self.driver.find_element(By.XPATH, "//h6[normalize-space()='Dashboard']").text
         assert_that("Dashboard").is_equal_to(actual_text)
 
-    def test_invalid_login(self):
-        self.driver.find_element(By.NAME, "username").send_keys("Admin1234")
-        self.driver.find_element(By.NAME, "password").send_keys("admin1234")
+    @pytest.mark.parametrize("username, password, cred_error", [
+        ("Admin1", "admin1", "Invalid credentials"),
+        ("Admin2", "admin2", "Invalid credentials")
+    ])
+    def test_invalid_login(self, username, password, cred_error):
+        self.driver.find_element(By.NAME, "username").send_keys(username)
+        self.driver.find_element(By.NAME, "password").send_keys(password)
         self.driver.find_element(By.XPATH, "//button[normalize-space()='Login']").click()
         actual_error = self.driver.find_element(By.XPATH,
                                                 "//p[text()='Invalid credentials']").text
-        assert_that("Invalid credentials").is_equal_to(actual_error)
+        assert_that(cred_error).is_equal_to(actual_error)
 
 
 class TestLoginUI(WebDriverWrapper):
