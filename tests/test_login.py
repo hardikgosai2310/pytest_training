@@ -9,7 +9,6 @@ from base.webdriver_listner import WebDriverWrapper
 
 
 class TestLogin(WebDriverWrapper):
-
     def test_valid_login(self):
         self.driver.find_element(By.NAME, "username").send_keys("Admin")
         self.driver.find_element(By.NAME, "password").send_keys("admin123")
@@ -17,24 +16,21 @@ class TestLogin(WebDriverWrapper):
         actual_text = self.driver.find_element(By.XPATH, "//h6[normalize-space()='Dashboard']").text
         assert_that("Dashboard").is_equal_to(actual_text)
 
+    def test_invalid_login(self):
+        self.driver.find_element(By.NAME, "username").send_keys("Admin1234")
+        self.driver.find_element(By.NAME, "password").send_keys("admin1234")
+        self.driver.find_element(By.XPATH, "//button[normalize-space()='Login']").click()
+        actual_error = self.driver.find_element(By.XPATH,
+                                                "//p[text()='Invalid credentials']").text
+        assert_that("Invalid credentials").is_equal_to(actual_error)
 
-class TestLoginUI:
-    @pytest.fixture(scope='function')
-    def setup(self):
-        self.driver = webdriver.Chrome()
-        self.driver.maximize_window()
-        self.driver.implicitly_wait(10)
-        self.driver.get('https://opensource-demo.orangehrmlive.com/')
 
-        yield
-        time.sleep(3)
-        self.driver.quit()
-
-    def test_title(self, setup):
+class TestLoginUI(WebDriverWrapper):
+    def test_title(self):
         actual_title = self.driver.title
         assert actual_title == 'OrangeHRM'
         assert_that('OrangeHRM').is_equal_to(actual_title)
 
-    def test_header(self, setup):
+    def test_header(self):
         actual_header = self.driver.find_element(By.XPATH, '//h5').text
         assert_that(actual_header).is_equal_to('Login')

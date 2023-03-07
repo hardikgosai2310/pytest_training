@@ -1,3 +1,5 @@
+import time
+
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -11,4 +13,5 @@ class WebDriverWrapper:
         self.driver.implicitly_wait(20)
         self.driver.get("https://opensource-demo.orangehrmlive.com/")
         yield
+        time.sleep(3)
         self.driver.quit()
