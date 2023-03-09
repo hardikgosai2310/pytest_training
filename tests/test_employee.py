@@ -6,6 +6,7 @@ from selenium.webdriver.common.by import By
 
 from base.webdriver_listner import WebDriverWrapper
 from utilities import data_source
+from utilities.read_utils import get_csv_as_list
 
 
 class TestEmployee(WebDriverWrapper):
@@ -29,3 +30,12 @@ class TestEmployee(WebDriverWrapper):
         employee_first_name = self.driver.find_element(By.NAME, "firstName").get_attribute("value")
         assert_that(employee_name).is_equal_to(full_name)
         assert_that(employee_first_name).is_equal_to(first_name)
+
+    @pytest.mark.parametrize("username, password, cred_error", get_csv_as_list('../test_data/test_invalid_login_data.csv'))
+    def test_invalid_login(self, username, password, cred_error):
+        self.driver.find_element(By.NAME, "username").send_keys(username)
+        self.driver.find_element(By.NAME, "password").send_keys(password)
+        self.driver.find_element(By.XPATH, "//button[normalize-space()='Login']").click()
+        actual_error = self.driver.find_element(By.XPATH,
+                                                "//p[text()='Invalid credentials']").text
+        assert_that(cred_error).is_equal_to(actual_error)
