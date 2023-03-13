@@ -1,14 +1,12 @@
-import time
-
 import pytest
 from assertpy import assert_that
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 
-from base.webdriver_listner import WebDriverWrapper
-from utilities import data_source
-from utilities.read_utils import get_csv_as_list, get_excel_as_list
+from framework_demo.base.webdriver_listner import WebDriverWrapper
+from framework_demo.utilities import data_source
+from framework_demo.utilities.read_utils import get_csv_as_list, get_excel_as_list
 
 
 class TestEmployee(WebDriverWrapper):

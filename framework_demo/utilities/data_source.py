@@ -1,4 +1,4 @@
-from utilities.read_utils import get_excel_as_list
+from framework_demo.utilities.read_utils import get_excel_as_list
 
 test_invalid_login_data = [
     ("Admin1", "admin1", "Invalid credentials"),
